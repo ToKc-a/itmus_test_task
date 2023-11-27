@@ -19,14 +19,6 @@ class VacanciesListScreen extends GetView<VacanciesController> {
                 title: const Text('Itmus test task',
                     style: TextStyle(color: Colors.white)),
                 backgroundColor: Colors.green,
-                actions: [
-                  IconButton(
-                      onPressed: () {
-                        controller.showFilter.toggle();
-                      },
-                      icon: const Icon(Icons.filter_list_outlined,
-                          color: Colors.white))
-                ],
               ),
               body: SingleChildScrollView(
                 controller: controller.scrollController,
@@ -34,6 +26,71 @@ class VacanciesListScreen extends GetView<VacanciesController> {
                   padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
                   child: Obx(() => Column(
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                    onTap: () => controller.showFilter.toggle(),
+                                    child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: const Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.filter_list_outlined,
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(width: 5),
+                                              Expanded(
+                                                child: Text('Показать фильтры',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    )),
+                                              )
+                                            ],
+                                          ),
+                                        ))),
+                              ),
+                              const SizedBox(width: 15),
+                              Expanded(
+                                child: InkWell(
+                                    onTap: () => controller.isMap.toggle(),
+                                    child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: const Center(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.map,
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(width: 5),
+                                              Expanded(
+                                                child: Text('Вакансии на карте',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    )),
+                                              )
+                                            ],
+                                          ),
+                                        ))),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
                           if (controller.showFilter())
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,31 +161,13 @@ class VacanciesListScreen extends GetView<VacanciesController> {
                                 const SizedBox(height: 15),
                               ],
                             ),
-                          Center(
-                            child: ToggleSwitch(
-                              minWidth: 120.0,
-                              initialLabelIndex: 0,
-                              cornerRadius: 10.0,
-                              activeFgColor: Colors.white,
-                              inactiveBgColor: Colors.grey,
-                              inactiveFgColor: Colors.white,
-                              totalSwitches: 2,
-                              labels: const ['Список', 'Карта'],
-                              icons: const [Icons.list, Icons.map_outlined],
-                              activeBgColors: const [
-                                [Colors.green],
-                                [Colors.green]
-                              ],
-                              onToggle: (index) {
-                                (index == 0)
-                                    ? controller.isMap(false)
-                                    : controller.isMap(true);
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 15),
                           (controller.isMap())
-                              ? SizedBox(height:MediaQuery.of(context).size.height*0.8,child: MapScreen(vacancies: state!,))
+                              ? SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.8,
+                                  child: MapScreen(
+                                    vacancies: controller.listVacanciesForMap,
+                                  ))
                               : ListView.separated(
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,

@@ -27,6 +27,7 @@ class VacanciesController extends GetxController
   List<FilterModel> clients = [];
   List<FilterModel> places = [];
   List<FilterModel> professions = [];
+  List<VacancyModel> listVacanciesForMap = <VacancyModel>[];
   List<PlacemarkMapObject> vacancyOnMap = [];
   final RxBool showFilter = false.obs;
   final RxBool isMap = false.obs;
@@ -151,10 +152,14 @@ class VacanciesController extends GetxController
           professions.add(FilterModel(
               filterId: element.profId, filterTitle: element.profTitle));
         }
+        if (listVacanciesForMap.where((p0) => p0.latitude == element.latitude).isEmpty){
+          listVacanciesForMap.add(element);
+        }
       });
       logger.i('Список clients = ${clients.length}');
       logger.i('Список places = ${places.length}');
       logger.i('Список professions = ${professions.length}');
+      logger.i('Список listVacanciesForMap = ${listVacanciesForMap.length}');
       logger.i('Список vacancyList = ${vacancyList.length}');
 
       dataBase.delete(dataBase.vacanciesItem).go();

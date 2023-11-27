@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:itmus_test_task/src/screens/vacancy_detail_screen.dart';
 import 'package:itmus_test_task/src/screens/widgets/cluster_icon_painter.dart';
 import 'package:itmus_test_task/src/screens/widgets/map_point.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
@@ -84,15 +86,20 @@ class _MapScreenState extends State<MapScreen> {
   }
 }
 
-List<MapPoint> _getMapPoints(List<VacancyModel> vacancies){
+List<MapPoint> _getMapPoints(List<VacancyModel> vacancies) {
   List<MapPoint> points = [];
-  var tempPointList = vacancies.where((element) => element.latitude != null );
-  tempPointList.map((e) => points.add(MapPoint(name: e.vacancyId.toString(), latitude: e.latitude!, longitude: e.longitude!)));
+  var tempPointList = vacancies.where((element) => element.latitude != null);
+  tempPointList.forEach((e) => points.add(MapPoint(
+      name: e.vacancyId.toString(),
+      latitude: e.latitude!,
+      longitude: e.longitude!,
+      vacancy: e)));
   print('Количество маркеров - ${points.length}');
   return points;
 }
 
-List<PlacemarkMapObject> _getPlacemarkObjects(BuildContext context, List<VacancyModel> vacancies) {
+List<PlacemarkMapObject> _getPlacemarkObjects(
+    BuildContext context, List<VacancyModel> vacancies) {
   return _getMapPoints(vacancies)
       .map(
         (point) => PlacemarkMapObject(
@@ -107,12 +114,8 @@ List<PlacemarkMapObject> _getPlacemarkObjects(BuildContext context, List<Vacancy
               scale: 1,
             ),
           ),
-          onTap: (_, __) => showModalBottomSheet(
-            context: context,
-            builder: (context) => _ModalBodyView(
-              point: point,
-            ),
-          ),
+          onTap: (_, __) =>
+              Get.to(() => VacancyDetailScreen(vacancy: point.vacancy)),
         ),
       )
       .toList();
